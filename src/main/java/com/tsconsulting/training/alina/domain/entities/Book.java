@@ -1,13 +1,13 @@
 package com.tsconsulting.training.alina.domain.entities;
 
-
 import com.tsconsulting.training.alina.constant.Genre;
 import com.tsconsulting.training.alina.converter.YearAttributeConverter;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.Year;
-import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -39,7 +39,7 @@ public class Book {
     @Column(name = "language")
     private String language;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinTable(name = "author_book",
             joinColumns = {@JoinColumn(name = "fk_book", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "fk_author", referencedColumnName = "id")})

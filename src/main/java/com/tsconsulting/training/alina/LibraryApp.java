@@ -1,48 +1,42 @@
 package com.tsconsulting.training.alina;
 
-import com.tsconsulting.training.alina.constant.Genre;
 import com.tsconsulting.training.alina.domain.entities.Author;
 import com.tsconsulting.training.alina.domain.entities.Book;
+import com.tsconsulting.training.alina.domain.entities.Section;
 import com.tsconsulting.training.alina.util.HibernateUtil;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import java.time.LocalDateTime;
-import java.time.Year;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.Set;
-
 /**
- * Hello world!
+ * Программа создает базу
  */
 public class LibraryApp {
-
-
-
     public static void main(String[] args) {
-        Author author1 = generateNewAuthor("Harry", "H");
-        Author author2 = generateNewAuthor("David", "B");
+        // Добавляем секцию
+        Section section = generateNewSection("AB78");
 
+        // Добавляем авторов
+        Author author1 = generateNewAuthor("Harry", "Harrison");
+        Author author2 = generateNewAuthor("David", "Bischoff");
+        author1.setSection(section);
+        author2.setSection(section);
+
+        // Добавляем книгу
         Book book1 = generateNewBook("Bill, the Galactic Hero on the Planet of Ten Thousand Bars");
         book1.addAuthor(author1);
         book1.addAuthor(author2);
 
-
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            // start a transaction
+            // Стартуем транзакцию
             transaction = session.beginTransaction();
-            // save the student objects
+            // Сохраняем новые объекты
+            session.save(section);
             session.save(author1);
             session.save(author2);
             session.save(book1);
 
-
-            // commit transaction
+            // Коммитим транзакцию
             transaction.commit();
 
         } catch (Exception e) {
@@ -52,21 +46,19 @@ public class LibraryApp {
             e.printStackTrace();
         }
 
-//        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-//            List<AuthorEntity> authors = session.createQuery("from Author", AuthorEntity.class).list();
-//            authors.forEach(a -> System.out.println(a.getFirstName()));
-//        } catch (Exception e) {
-//            if (transaction != null) {
-//                transaction.rollback();
-//            }
-//            e.printStackTrace();
-//        }
+    }
+
+    private static Section generateNewSection(String name) {
+        Section section = new Section();
+        section.setName(name);
+        return section;
     }
 
     private static Author generateNewAuthor(String fName, String lName) {
         Author author = new Author();
         author.setFirstName(fName);
         author.setLastName(lName);
+//        author.setSection(section);
         return author;
     }
 

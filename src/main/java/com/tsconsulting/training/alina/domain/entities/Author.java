@@ -11,8 +11,7 @@ import java.util.Set;
 
 // Были проблемы, если аннотация @Data и у Author, и у Book; ошибка "Method threw 'org.hibernate.HibernateException' exception. Cannot evaluate com.tsconsulting.training.alina.domain.entities.Author.toString()"
 //попробовать на many-to-many @ToString.Exclude
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -39,8 +38,9 @@ public class Author {
     @Column(name = "alive", nullable = true)
     private boolean isAlive;
 
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "author", cascade = CascadeType.ALL)
-
+    @ManyToOne()
+    @JoinColumn(name = "section_id", nullable = false)
+    private Section section;
 
     @ManyToMany(mappedBy = "authors")
     private Set<Book> books = new HashSet<>();

@@ -1,0 +1,13 @@
+// Тестовые данные
+Author1 = Alexandr Pushkin
+Alive = NO
+BirthDate = 1799-06-06
+Book1 = "Ruslan and Ludmila"
+Genre = POETRY
+Language = Russian
+Year = 1820
+
+Author2 = Harry Harrison
+Author3 = David Bischoff
+Book2 = "Bill, the Galactic Hero on the Planet of Ten Thousand Bars"
+Genre = FICTION

@@ -26,5 +26,6 @@
         <property name="hibernate.dbcp.maxWaitMillis">-1</property>
         <mapping class="com.tsconsulting.training.alina.domain.entities.Author" />
         <mapping class="com.tsconsulting.training.alina.domain.entities.Book" />
+        <mapping class="com.tsconsulting.training.alina.domain.entities.Section" />
     </session-factory>
 </hibernate-configuration>
