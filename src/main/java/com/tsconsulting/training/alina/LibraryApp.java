@@ -7,6 +7,8 @@ import com.tsconsulting.training.alina.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.util.Set;
+
 /**
  * Программа создает базу
  */
@@ -23,8 +25,7 @@ public class LibraryApp {
 
         // Добавляем книгу
         Book book1 = generateNewBook("Bill, the Galactic Hero on the Planet of Ten Thousand Bars");
-        book1.addAuthor(author1);
-        book1.addAuthor(author2);
+        book1.setAuthors(Set.of(author1, author2));
 
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -39,13 +40,15 @@ public class LibraryApp {
             // Коммитим транзакцию
             transaction.commit();
 
+            Author author = session.find(Author.class, 100L);
+            System.out.println(author);
+
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
             e.printStackTrace();
         }
-
     }
 
     private static Section generateNewSection(String name) {

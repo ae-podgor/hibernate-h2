@@ -1,13 +1,11 @@
 package com.tsconsulting.training.alina.domain.entities;
 
-
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Set;
-
 
 // Были проблемы, если аннотация @Data и у Author, и у Book; ошибка "Method threw 'org.hibernate.HibernateException' exception. Cannot evaluate com.tsconsulting.training.alina.domain.entities.Author.toString()"
 //попробовать на many-to-many @ToString.Exclude
@@ -25,7 +23,6 @@ public class Author {
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
-
     @Column(name = "first_name", length = 100, nullable = false)
     private String firstName;
 
@@ -38,11 +35,14 @@ public class Author {
     @Column(name = "alive", nullable = true)
     private boolean isAlive;
 
-    @ManyToOne()
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "section_id", nullable = false)
     private Section section;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToMany(mappedBy = "authors")
-    private Set<Book> books = new HashSet<>();
-
+    private Set<Book> books = Collections.emptySet();
 }

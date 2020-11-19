@@ -1,11 +1,9 @@
 package com.tsconsulting.training.alina.domain.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Set;
 
 @Data
@@ -28,7 +26,8 @@ public class Section {
     @Column(name = "restricted")
     private boolean isRestricted;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "section", cascade = CascadeType.ALL)
-    private Set<Author> authors = new HashSet<>();
-
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "section")
+    private Set<Author> authors = Collections.emptySet();
 }
