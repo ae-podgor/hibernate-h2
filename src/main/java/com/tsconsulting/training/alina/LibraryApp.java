@@ -4,9 +4,12 @@ import com.tsconsulting.training.alina.domain.entities.Author;
 import com.tsconsulting.training.alina.domain.entities.Book;
 import com.tsconsulting.training.alina.domain.entities.Section;
 import com.tsconsulting.training.alina.util.HibernateUtil;
+import com.tsconsulting.training.alina.util.LiquibaseInit;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.time.Year;
+import java.util.GregorianCalendar;
 import java.util.Set;
 
 /**
@@ -14,6 +17,9 @@ import java.util.Set;
  */
 public class LibraryApp {
     public static void main(String[] args) {
+        // Инициализируем Liquibase
+        LiquibaseInit.init();
+
         // Добавляем секцию
         Section section = generateNewSection("AB78");
 
@@ -26,6 +32,7 @@ public class LibraryApp {
         // Добавляем книгу
         Book book1 = generateNewBook("Bill, the Galactic Hero on the Planet of Ten Thousand Bars");
         book1.setAuthors(Set.of(author1, author2));
+        book1.setPublicationYear(Year.of(2006));
 
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -40,8 +47,10 @@ public class LibraryApp {
             // Коммитим транзакцию
             transaction.commit();
 
-            Author author = session.find(Author.class, 100L);
-            System.out.println(author);
+            Author authorOne = session.find(Author.class, 126L);
+            System.out.println(authorOne);
+            Author authorTwo = session.find(Author.class, 127L);
+            System.out.println(authorTwo);
 
         } catch (Exception e) {
             if (transaction != null) {

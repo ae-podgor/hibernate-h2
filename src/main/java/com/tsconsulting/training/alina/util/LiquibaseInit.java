@@ -6,7 +6,6 @@ import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.ClassLoaderResourceAccessor;
 import org.hibernate.SessionFactory;
-import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -14,12 +13,11 @@ import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
 
 import java.sql.Connection;
 
-public class HibernateUtil {
+public class LiquibaseInit {
     private static StandardServiceRegistry registry;
-    private static SessionFactory sessionFactory;
 
-    public static SessionFactory getSessionFactory(){
-        if (sessionFactory == null) {
+    public static void init() {
+
             try {
                 // Create registry
                 registry = new StandardServiceRegistryBuilder().configure().build();
@@ -27,11 +25,14 @@ public class HibernateUtil {
                 // Create MetadataSources
                 MetadataSources sources = new MetadataSources(registry);
 
-                // Create Metadata
-                Metadata metadata = sources.getMetadataBuilder().build();
+                // Get database connection
+                Connection con = sources.getServiceRegistry().getService(ConnectionProvider.class).getConnection();
+                JdbcConnection jdbcCon = new JdbcConnection(con);
 
-                // Create SessionFactory
-                sessionFactory = metadata.getSessionFactoryBuilder().build();
+                // Initialize Liquibase and run the update
+                Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(jdbcCon);
+                Liquibase liquibase = new Liquibase("db/db.changelog-master.xml", new ClassLoaderResourceAccessor(), database);
+                liquibase.update("test");
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -39,13 +40,5 @@ public class HibernateUtil {
                     StandardServiceRegistryBuilder.destroy(registry);
                 }
             }
-        }
-        return sessionFactory;
-    }
-
-    public static void shutdown() {
-        if (registry != null) {
-            StandardServiceRegistryBuilder.destroy(registry);
-        }
     }
 }

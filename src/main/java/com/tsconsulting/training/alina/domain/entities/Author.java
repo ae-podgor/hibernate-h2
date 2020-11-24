@@ -13,7 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "author_data")
+@Table(name = "author")
 public class Author {
     public static final String SEQ_AUTHOR_GENERATOR = "seq_author_generator";
 

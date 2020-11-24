@@ -1,0 +1,129 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="12" author="Mr.Bubz">
+        <comment>Generate table SECTION</comment>
+        <createTable tableName="section">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="section_name" type="varchar(4)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="restricted" type="boolean"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="section"/>
+        </rollback>
+    </changeSet>
+
+
+    <changeSet id="13" author="Mr.Bubz">
+        <comment>Generate table AUTHOR</comment>
+        <createTable tableName="author">
+            <column name="id" type="int" autoIncrement="true" startWith="100">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="first_name" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="birth_date" type="datetime"/>
+            <column name="alive" type="boolean"/>
+            <column name="section_id" type="int">
+                <constraints nullable="false"
+                             foreignKeyName="section_id_fk"
+                             referencedTableName="section"
+                             referencedColumnNames="id"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="author"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="14" author="Mr.Bubz">
+        <comment>Generate table BOOK</comment>
+        <createTable tableName="book">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="book_name" type="varchar(1000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="publication_year" type="int"/>
+            <column name="genre" type="varchar"/>
+            <column name="language" type="varchar"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="book"/>
+        </rollback>
+    </changeSet>
+
+    <!--Create join table "AUTHOR_BOOK" and adding foreign keys-->
+    <changeSet id="15" author="Mr.Bubz">
+        <comment>Create join table AUTHOR_BOOK and add foreign keys</comment>
+        <createTable tableName="author_book">
+            <column name="fk_author" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fk_book" type="varchar(1000)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint constraintName="fk_author"
+                                 baseTableName="author_book" baseColumnNames="fk_author"
+                                 referencedTableName="author" referencedColumnNames="id" />
+        <addForeignKeyConstraint constraintName="fk_book"
+                                 baseTableName="author_book" baseColumnNames="fk_book"
+                                 referencedTableName="book" referencedColumnNames="id" />
+        <rollback>
+            <dropTable tableName="author_book"/>
+        </rollback>
+    </changeSet>
+
+
+    <changeSet  id="16" author="alinka">
+        <comment>Add sequences for all tables</comment>
+        <createSequence  incrementBy="5"
+                         maxValue="10000"
+                         minValue="100"
+                         ordered="true"
+                         schemaName="public"
+                         sequenceName="seq_author_generator"
+                         startValue="100"/>
+        <createSequence  incrementBy="5"
+                         maxValue="10000"
+                         minValue="1"
+                         ordered="true"
+                         schemaName="public"
+                         sequenceName="seq_book_generator"
+                         startValue="1"/>
+        <createSequence  incrementBy="5"
+                         maxValue="10000"
+                         minValue="1"
+                         ordered="true"
+                         schemaName="public"
+                         sequenceName="seq_section_generator"
+                         startValue="1"/>
+    </changeSet>
+
+    <changeSet id="17" author="alinka">
+        <comment>Add check constraints to book table</comment>
+        <sql>
+            ALTER TABLE book
+            ADD CONSTRAINT genre_check check (genre in ('DRAMA', 'FICTION', 'NONFICTION', 'POETRY'));
+        </sql>
+        <rollback>
+            <sql>
+                ALTER TABLE book
+                DROP CONSTRAINT genre_check;
+            </sql>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

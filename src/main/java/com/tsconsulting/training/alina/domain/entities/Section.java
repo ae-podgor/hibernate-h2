@@ -10,7 +10,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "library_section")
+@Table(name = "section")
 public class Section {
     public static final String SEQ_SECTION_GENERATOR = "seq_section_generator";
 
