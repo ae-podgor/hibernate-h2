@@ -47,9 +47,9 @@ public class LibraryApp {
             // Коммитим транзакцию
             transaction.commit();
 
-            Author authorOne = session.find(Author.class, 126L);
+            Author authorOne = session.find(Author.class, 100L);
             System.out.println(authorOne);
-            Author authorTwo = session.find(Author.class, 127L);
+            Author authorTwo = session.find(Author.class, 101L);
             System.out.println(authorTwo);
 
         } catch (Exception e) {

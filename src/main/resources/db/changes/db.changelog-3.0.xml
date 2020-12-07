@@ -64,7 +64,6 @@
         </rollback>
     </changeSet>
 
-    <!--Create join table "AUTHOR_BOOK" and adding foreign keys-->
     <changeSet id="15" author="Mr.Bubz">
         <comment>Create join table AUTHOR_BOOK and add foreign keys</comment>
         <createTable tableName="author_book">
@@ -90,23 +89,17 @@
     <changeSet  id="16" author="alinka">
         <comment>Add sequences for all tables</comment>
         <createSequence  incrementBy="5"
-                         maxValue="10000"
                          minValue="100"
-                         ordered="true"
                          schemaName="public"
                          sequenceName="seq_author_generator"
                          startValue="100"/>
         <createSequence  incrementBy="5"
-                         maxValue="10000"
                          minValue="1"
-                         ordered="true"
                          schemaName="public"
                          sequenceName="seq_book_generator"
                          startValue="1"/>
         <createSequence  incrementBy="5"
-                         maxValue="10000"
                          minValue="1"
-                         ordered="true"
                          schemaName="public"
                          sequenceName="seq_section_generator"
                          startValue="1"/>
